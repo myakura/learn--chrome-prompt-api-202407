@@ -1,10 +1,82 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>AI popover</title>
+<title>AI summarizer</title>
 <meta name="viewport" content="width=device-width">
+<style>
+	body {
+		font-family: sans-serif;
+	}
+
+	.stack {
+		display: grid;
+		gap: 1em;
+	}
+
+	.hstack {
+		display: flex;
+		gap: 1em;
+	}
+
+	textarea {
+		max-width: 100%;
+		height: 10em;
+		resize: auto;
+		padding: 0.5em;
+	}
+
+	button {
+		padding: 0.5em 2em;
+		width: fit-content;
+	}
+
+	output {
+		max-width: 100%;
+		min-height: 10em;
+		resize: auto;
+		padding: 0.5em;
+		border: 1px solid;
+
+		&.error {
+			border-color: crimson;
+		}
+	}
+</style>
 <body>
-	<h1>AI popover</h1>
-	<p>Click the button below to show popover.</p>
-	<button popovertarget="popover">Show popover</button>
-	<div popover id="popover">Hello.</div>
+	<h1>AI summarizer</h1>
+	<p>Enter text and click the "Summarize" button to summarize it.</p>
+	<div class="stack">
+		<textarea id="textarea"></textarea>
+		<div class="hstack">
+			<button id="buttonSummarize">Summarize</button>
+			<button id="buttonClear">Clear</button>
+		</div>
+		<output id="output"></output>
+	</div>
+
+	<script type="module">
+		import { summarize } from './summarize.js';
+
+		const textarea = document.querySelector('#textarea');
+		const buttonSummarize = document.querySelector('#buttonSummarize');
+		const buttonClear = document.querySelector('#buttonClear');
+		const output = document.querySelector('#output');
+
+		buttonSummarize.addEventListener('click', async () => {
+			let response = '';
+			try {
+				response = await summarize(textarea.value);
+			}
+			catch (error) {
+				output.classList.add('error');
+				response = error.message;
+			}
+			output.value = response;
+		});
+
+		buttonClear.addEventListener('click', () => {
+			textarea.value = '';
+			output.classList.remove('error');
+			output.value = '';
+		});
+	</script>
 </body>
