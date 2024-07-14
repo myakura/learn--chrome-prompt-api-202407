@@ -4,12 +4,12 @@ async function summarize(input) {
 		throw new Error('window.ai is not defined');
 	}
 
-	const canCreate = await ai.canCreateTextSession();
+	const canCreate = await window.ai.canCreateTextSession();
 	if (canCreate !== 'readily') {
 		throw new Error('Cannot create a text session.');
 	}
 
-	const session = await ai.createTextSession();
+	const session = await window.ai.createTextSession();
 	const prompt = `Summarize the following text.\n\n### input\n${input}`;
 
 	try {
