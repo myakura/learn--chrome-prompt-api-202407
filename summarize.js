@@ -9,9 +9,7 @@ async function summarize(input) {
 		throw new Error('Cannot create a text session.');
 	}
 
-	const session = await ai.createTextSession({
-		systemPrompt: "You are a friendly, helpful assistant specialized in summarizing and editing."
-	});
+	const session = await ai.createTextSession();
 	const prompt = `Summarize the following text.\n\n### input\n${input}`;
 
 	try {
