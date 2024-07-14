@@ -105,7 +105,7 @@
 	<h1>AI summarizer</h1>
 	<p>Enter text and click the "Summarize" button to summarize it.</p>
 	<div class="layout">
-		<textarea id="textarea"></textarea>
+		<textarea id="textarea" autofocus></textarea>
 		<div class="hstack" id="buttons">
 			<button id="buttonSummarize">Summarize</button>
 			<div id="throbber" hidden></div>
@@ -126,22 +126,25 @@
 		buttonSummarize.addEventListener('click', async () => {
 			let response = '';
 			try {
+				textarea.readOnly = true;
 				throbber.hidden = false;
 				response = await summarize(textarea.value);
 			}
 			catch (error) {
+				throbber.hidden = true;
 				output.classList.add('error');
 				response = error.message;
-				throbber.hidden = true;
 			}
-			output.value = response;
+			textarea.readOnly = false;
 			throbber.hidden = true;
+			output.value = response;
 		});
 
 		buttonClear.addEventListener('click', () => {
-			textarea.value = '';
-			output.classList.remove('error');
 			output.value = '';
+			output.classList.remove('error');
+			textarea.value = '';
+			textarea.focus();
 		});
 	</script>
 </body>
